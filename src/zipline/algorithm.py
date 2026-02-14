@@ -1193,7 +1193,7 @@ class TradingAlgorithm:
                 " Use 'sid()' or 'symbol()' methods to look up an Asset."
             )
 
-        if asset.auto_close_date:
+        if asset.auto_close_date is not None:
             # TODO FIXME TZ MESS
             day = self.trading_calendar.minute_to_session(self.get_datetime())
 
@@ -1300,7 +1300,7 @@ class TradingAlgorithm:
                 msg="order() can only be called from within handle_data()"
             )
 
-        if style:
+        if style is not None:
             if limit_price:
                 raise UnsupportedOrderParameters(
                     msg="Passing both limit_price and style is not supported."
