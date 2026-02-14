@@ -782,7 +782,7 @@ class HDF5DailyBarReader(CurrencyAwareSessionBarReader):
         # If that's the case, the proper NoDataOnDate exception is raised.
         # Otherwise (when there's just a hole in the middle of the data), the
         # nan is returned.
-        if np.isnan(value):
+        if np.issubdtype(np.asarray(value).dtype, np.floating) and np.isnan(value):
             if dt.asm8 < self.asset_start_dates[sid_ix]:
                 raise NoDataBeforeDate()
 

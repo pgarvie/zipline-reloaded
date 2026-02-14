@@ -539,7 +539,7 @@ class _ClassicRiskMetrics:
             return
 
         tzinfo = end_date.tzinfo
-        end_date = end_date
+        end_date = end_date.tz_localize(None) if end_date.tzinfo is not None else end_date
         for period_timestamp in months:
             period = period_timestamp.tz_localize(None).to_period(
                 freq="%dM" % months_per
@@ -547,9 +547,10 @@ class _ClassicRiskMetrics:
             if period.end_time > end_date:
                 break
 
+            end_session_naive = end_session.tz_localize(None) if end_session.tzinfo is not None else end_session
             yield cls.risk_metric_period(
                 start_session=period.start_time.tz_localize(tzinfo),
-                end_session=min(period.end_time, end_session).tz_localize(tzinfo),
+                end_session=min(period.end_time, end_session_naive).tz_localize(tzinfo),
                 algorithm_returns=algorithm_returns,
                 benchmark_returns=benchmark_returns,
                 algorithm_leverages=algorithm_leverages,
